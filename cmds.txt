@@ -1,0 +1,11 @@
+
+python3 -m venv rki_scrape_3_8_10
+source rki_scrape_3_8_10/bin/activate .
+pip install -r requirements.txt
+python scripts/rki_scrape.py 
+
+docker build -t docker-rki_scraper .
+docker run -it --name docker-rki_scraper docker-rki_scraper
+docker ps
+docker stop docker-rki_scraper
+docker rm docker-rki_scraper
