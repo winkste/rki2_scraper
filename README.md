@@ -17,3 +17,4 @@ docker run -it --name docker-rki_scraper docker-rki_scraper
 docker ps
 docker stop docker-rki_scraper
 docker rm docker-rki_scraper
+docker save -o docker-rki.tar docker-rki
