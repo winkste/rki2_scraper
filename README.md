@@ -14,7 +14,9 @@ Please note: This version of the RKI scraper is reduced to a minimum and is targ
 You can run the python project for test directly on the development machine, therefore a virtual environment including pylint is available.
 
 ### run static code analysis
+```
 pylint scripts/rki_scrape.py
+```
 
 ### run program with virtual environment as stand alone
 ```
