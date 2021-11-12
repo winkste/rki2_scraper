@@ -1,7 +1,8 @@
 #!/usr/bin/python
 '''This module supports reading the rki data sets'''
 import datetime
-# import pprint
+import lastdata
+import pprint
 from paho.mqtt import publish
 import my_secrets
 import requests
@@ -25,7 +26,6 @@ def publish_data(topic, payload):
                     port=my_secrets.port, client_id=my_secrets.client_id,
                     auth=my_secrets.auth)
 
-
 def main():
     '''This is the module main function '''
     # read and print the actual time / date information to the command line
@@ -37,8 +37,6 @@ def main():
     #print("Actual Time/Date of call: %s"%(now.strftime("%Y-%m-%d %H:%M:%S")))
     print("*******************************************************************")
 
-    # read RKI history buffer
-
     # read RKI data from RKI page
     celle = {}
     noh   = {}
@@ -46,17 +44,32 @@ def main():
     request_rki_data(noh, RKI_API_STRING_FOR_NOH)
 
     # process RKI data to get 7 day incident value
-    celle_actual_inc = str(round(celle[date_key]['cases7_per_100k'], 2))
-    noh_actual_inc = str(round(noh[date_key]['cases7_per_100k'], 2))
+    celle_actual_inc = round(celle[date_key]['cases7_per_100k'], 2)
+    noh_actual_inc = round(noh[date_key]['cases7_per_100k'], 2)
+
+    if celle_actual_inc > lastdata.celle_last_inc:
+        celle_7inc_trend = "^"
+    elif celle_actual_inc < lastdata.celle_last_inc:
+        celle_7inc_trend = "v"
+    else:
+        celle_7inc_trend = "-"
 
     # update RKI history buffer with new value
+    file = open('lastdata.py', 'w')
+    file.write('celle_last_inc =' + pprint.pformat(celle_actual_inc))
+    file.write('\n')
+    file.write('noh_last_inc =' + pprint.pformat(noh_actual_inc))
+    file.close()
 
     # publish RKI data to MQTT
     topic = "std/dev200/s/rki/ce/c7"
-    publish_data(topic, celle_actual_inc)
+    #publish_data(topic, str(celle_actual_inc))
+    topic = "std/dev200/s/rki/ce/c7_t"
+    #publish_data(topic, celle_7inc_trend)
     topic = "std/dev200/s/rki/noh/c7"
-    publish_data(topic, noh_actual_inc)
-    publish_data('std/devTest/s/test/', 'HELLO')
+    #publish_data(topic, str(noh_actual_inc))
+    topic = "std/dev200/s/rki/noh/c7_t"
+    #publish_data(topic, noh_7inc_trend)
 
 
 

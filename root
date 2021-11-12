@@ -1,5 +1,8 @@
 # run every day at 05:15am
-15 5 * * * python3 /bin/rki_scrape.py
+30 4 * * * python3 /bin/rki_scrape.py
+# run every hour
+#0 * * * * python3 /bin/rki_scrape.py
+# run every minute
 #* * * * * python3 /bin/rki_scrape.py
 
 # * min(0-59)

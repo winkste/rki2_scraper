@@ -131,3 +131,6 @@ dmypy.json
 
 # private secrets
 my_secrets.py
+
+# the docker image
+.tar
