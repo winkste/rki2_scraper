@@ -16,7 +16,7 @@ You can run the python project for test directly on the development machine, the
 ### run static code analysis
 ```
 pylint scripts/rki_scrape.py
-
+```
 
 ### run program with virtual environment as stand alone
 ```
